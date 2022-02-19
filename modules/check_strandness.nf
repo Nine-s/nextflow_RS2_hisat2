@@ -1,4 +1,3 @@
-ess.nf 
 process CHECK_STRANDNESS {
 	input:
 		tuple val(sample_name), path(reads)
