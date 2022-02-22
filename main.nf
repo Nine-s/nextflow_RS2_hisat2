@@ -8,7 +8,7 @@ include { SAMTOOLS ; SAMTOOLS_MERGE } from './modules/samtools.nf'
 include { CUFFLINKS } from './modules/cufflinks.nf'
 
 log.info """\
-         RNAseq differential analysis using NextFlow 
+         RNAseq analysis using NextFlow 
          =============================
          genome: ${params.reference_genome}
          annot : ${params.reference_annotation}
@@ -79,8 +79,9 @@ workflow {
         | view()
         | set{ read_pairs_ch }
 
-    HISAT2_ALIGN( read_pairs_ch, HISAT2_INDEX_REFERENCE.out, EXTRACT_EXONS.out, EXTRACT_SPLICE_SITES.out, CHECK_STRANDNESS.out.first() )
+    HISAT2_ALIGN( read_pairs_ch, HISAT2_INDEX_REFERENCE.out, EXTRACT_SPLICE_SITES.out, CHECK_STRANDNESS.out.first() )
     SAMTOOLS( HISAT2_ALIGN.out.sample_sam )
     SAMTOOLS_MERGE( SAMTOOLS.out.sample_bam.collect() )
     CUFFLINKS( CHECK_STRANDNESS.out, SAMTOOLS_MERGE.out.gathered_bam, params.reference_annotation )
+
 }

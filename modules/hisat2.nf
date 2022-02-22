@@ -42,7 +42,7 @@ process HISAT2_INDEX_REFERENCE {
 
     script:
     """
-    hisat2-build ${reference} ${reference.baseName} -p ${params.threads} --exons ${exon} --ss ${splice_sites}
+    hisat2-build ${reference} ${reference.baseName} -p ${params.threads} --exon ${exon} --ss ${splice_sites}
     """
 }
 
@@ -52,28 +52,27 @@ process HISAT2_ALIGN {
  
     input:
     tuple val(sample_name), path(reads_1), path(reads_2)
-    path(index)
-    path(exon)
+    tuple path(reference), path(index)
     path(splice_sites)
     env STRANDNESS
 
     output:
     path "${sample_name}_summary.log", emit: log
-    tuple val(sample_name), path("${sample_name}.sam"), emit: sample_sam 
+    tuple val(sample_name), path("${reads_1.getBaseName()}.sam"), emit: sample_sam 
 
     shell:
     '''
     if [[ ($STRANDNESS == "firststrand") ]]; then
     
-        hisat2 -x ${reference.baseName} -1 ${reads[0]} -2 ${reads[1]} --new-summary --summary-file ${sample_name}_summary.log --thread ${params.threads} --dta-cufflinks --exons ${exon} --ss ${splice_sites} --rna-strandness FR -S ${sample_name}.sam
+        hisat2 -x !{reference.baseName} -1 !{reads[0]} -2 !{reads[1]} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} --rna-strandness FR -S !{reads_1.getBaseName()}.sam
 
     if [[ ($STRANDNESS == "secondstrand") ]]; then
     
-        hisat2 -x ${reference.baseName} -1 ${reads[0]} -2 ${reads[1]} --new-summary --summary-file ${sample_name}_summary.log --thread ${params.threads} --dta-cufflinks --exons ${exon} --ss ${splice_sites} --rna-strandness RF -S ${sample_name}.sam
+        hisat2 -x !{reference.baseName} -1 !{reads[0]} -2 !{reads[1]} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} --rna-strandness RF -S !{reads_1.getBaseName()}.sam
 
     elif [[ $STRANDNESS == "unstranded" ]]; then
        
-        hisat2 -x ${reference.baseName} -1 ${reads[0]} -2 ${reads[1]} --new-summary --summary-file ${sample_name}_summary.log --thread ${params.threads} --dta-cufflinks --exons ${exon} --ss ${splice_sites} -S ${sample_name}.sam
+        hisat2 -x !{reference.baseName} -1 !{reads[0]} -2 !{reads[1]} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} -S !{reads_1.getBaseName()}.sam
     else  
 		echo $STRANDNESS > error_strandness.txt
 		echo "strandness cannot be determined" >> error_strandness.txt
