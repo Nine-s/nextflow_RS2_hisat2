@@ -64,15 +64,15 @@ process HISAT2_ALIGN {
     '''
     if [[ ($STRANDNESS == "firststrand") ]]; then
     
-        hisat2 -x !{reference.baseName} -1 !{reads[0]} -2 !{reads[1]} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} --rna-strandness FR -S !{reads_1.getBaseName()}.sam
+        hisat2 -x !{reference.baseName} -1 !{reads_1} -2 !{reads_2} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} --rna-strandness FR -S !{reads_1.getBaseName()}.sam
 
     if [[ ($STRANDNESS == "secondstrand") ]]; then
     
-        hisat2 -x !{reference.baseName} -1 !{reads[0]} -2 !{reads[1]} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} --rna-strandness RF -S !{reads_1.getBaseName()}.sam
+        hisat2 -x !{reference.baseName} -1 !{reads_1} -2 !{reads_2} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} --rna-strandness RF -S !{reads_1.getBaseName()}.sam
 
     elif [[ $STRANDNESS == "unstranded" ]]; then
        
-        hisat2 -x !{reference.baseName} -1 !{reads[0]} -2 !{reads[1]} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} -S !{reads_1.getBaseName()}.sam
+        hisat2 -x !{reference.baseName} -1 !{reads_1} -2 !{reads_2} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --dta-cufflinks --known-splicesite-infile !{splice_sites} -S !{reads_1.getBaseName()}.sam
     else  
 		echo $STRANDNESS > error_strandness.txt
 		echo "strandness cannot be determined" >> error_strandness.txt
