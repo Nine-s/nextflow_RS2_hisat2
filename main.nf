@@ -71,7 +71,7 @@ workflow {
     FASTP( read_pairs_unsplit_ch )
     EXTRACT_EXONS( params.reference_annotation )
     EXTRACT_SPLICE_SITES( params.reference_annotation )
-    HISAT2_INDEX_REFERENCE( params.reference_genome, EXTRACT_EXONS.out, EXTRACT_SPLICE_SITES.out )
+    HISAT2_INDEX_REFERENCE( params.reference_genome )
     
     split_fastq(FASTP.out.sample_trimmed) \
 	    | map { name, fastq, fastq1 -> tuple( groupKey(name, fastq.size()), fastq, fastq1 ) } \
