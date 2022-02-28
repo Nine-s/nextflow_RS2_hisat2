@@ -31,6 +31,9 @@ process EXTRACT_SPLICE_SITES {
 process HISAT2_INDEX_REFERENCE {
     label 'hisat2'
     publishDir params.outdir
+    memory '50 GB'
+    executor 'k8s'
+
 
     input:
     path(reference)
