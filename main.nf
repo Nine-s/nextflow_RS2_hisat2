@@ -3,7 +3,7 @@ nextflow.enable.dsl = 2
 
 include { FASTP } from './modules/fastp.nf'
 include { CHECK_STRANDNESS } from './modules/check_strandness.nf'
-include { HISAT2_INDEX_REFERENCE ; HISAT2_INDEX_REFERENCE_MINIMAL ; HISAT2_ALIGN ; EXTRACT_SPLICE_SITES ; EXTRACT_EXONS } from './modules/hisat2.nf'
+include { HISAT2_INDEX_REFERENCE ; HISAT2_ALIGN ; EXTRACT_SPLICE_SITES ; EXTRACT_EXONS } from './modules/hisat2.nf'
 include { SAMTOOLS ; SAMTOOLS_MERGE } from './modules/samtools.nf'
 include { CUFFLINKS } from './modules/cufflinks.nf'
 
