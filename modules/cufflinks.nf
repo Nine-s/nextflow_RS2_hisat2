@@ -14,7 +14,7 @@ process CUFFLINKS {
     '''
     if [[ $STRANDNESS == "firststrand" ]]; then
          cufflinks -G !{annotation} !{sorted_bam} --library-type fr-firststrand --num-threads !{params.threads}
-    elif [ $STRANDNESS == "secondstrand" ]]; then
+    elif [[ $STRANDNESS == "secondstrand" ]]; then
          cufflinks -G !{annotation} !{sorted_bam} --library-type fr-secondstrand --num-threads !{params.threads}
     elif [[ $STRANDNESS == "unstranded" ]]; then
          cufflinks -G !{annotation} !{sorted_bam} --library-type fr-unstranded --num-threads !{params.threads}
